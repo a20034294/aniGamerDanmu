@@ -80,17 +80,10 @@ def downlaod_all(sn, bangumi_path, format_str='{anime_name}[{episode}].ass'):
     soup = BeautifulSoup(r.text, 'lxml')
     anime_name = re.match(r'(^.+)\s\[.+\]$', soup.find_all('div', class_='anime_name')[0].h1.string).group(1)
     print(anime_name)
+
+    sn_list = soup.find_all('section', class_='season')[0].find_all('a')
+
     os.makedirs(os.path.join(bangumi_path, anime_name), exist_ok=True)
-
-    try:
-        sn_list = soup.find_all('section', class_='season')[0].find_all('a')
-    except:
-        # 抓不到其他集數 可能為劇場版 套用單集下載策略
-        anime_name, episode = get_info(sn)
-        os.makedirs(os.path.join(bangumi_path, anime_name), exist_ok=True)
-        download(sn, os.path.join(bangumi_path, anime_name, format_str.format(anime_name=anime_name, episode=episode)))
-        return
-
 
     for s in sn_list:
         episode = s.string
