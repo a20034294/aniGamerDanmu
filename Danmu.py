@@ -7,16 +7,7 @@ import os
 import argparse
 
 def download(sn, full_filename):
-    h = {
-        'Content-Type':
-        'application/x-www-form-urlencoded;charset=utf-8',
-        'origin':
-        'https://ani.gamer.com.tw',
-        'authority':
-        'ani.gamer.com.tw',
-        'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
-    }
+    h = get_header()
     data = {'sn': str(sn)}
     r = requests.post(
         'https://ani.gamer.com.tw/ajax/danmuGet.php', data=data, headers=h)
@@ -79,16 +70,7 @@ def download(sn, full_filename):
     print('彈幕下載完成 file: ' + full_filename)
 
 def downlaod_all(sn, bangumi_path, format_str='{anime_name}[{episode}].ass'):
-    h = {
-        'Content-Type':
-        'application/x-www-form-urlencoded;charset=utf-8',
-        'origin':
-        'https://ani.gamer.com.tw',
-        'authority':
-        'ani.gamer.com.tw',
-        'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
-    }
+    h = h = get_header()
     r = requests.get('https://ani.gamer.com.tw/animeVideo.php?sn=' + str(sn), headers=h)
 
     if r.status_code != 200:
@@ -108,16 +90,7 @@ def downlaod_all(sn, bangumi_path, format_str='{anime_name}[{episode}].ass'):
         download(s['href'][4:], os.path.join(bangumi_path, anime_name, format_str.format(anime_name=anime_name, episode=episode)))
 
 def get_info(sn):
-    h = {
-        'Content-Type':
-        'application/x-www-form-urlencoded;charset=utf-8',
-        'origin':
-        'https://ani.gamer.com.tw',
-        'authority':
-        'ani.gamer.com.tw',
-        'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
-    }
+    h = get_header()
     r = requests.get('https://ani.gamer.com.tw/animeVideo.php?sn=' + str(sn), headers=h)
 
     if r.status_code != 200:
@@ -128,6 +101,18 @@ def get_info(sn):
     anime_name = re.match(r'(^.+)\s\[.+\]$', soup.find_all('div', class_='anime_name')[0].h1.string).group(1)
     episode = re.match(r'^.+\s\[(.+)\]$', soup.find_all('div', class_='anime_name')[0].h1.string).group(1)
     return anime_name, episode
+
+def get_header():
+    return {
+        'Content-Type':
+        'application/x-www-form-urlencoded;charset=utf-8',
+        'origin':
+        'https://ani.gamer.com.tw',
+        'authority':
+        'ani.gamer.com.tw',
+        'user-agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
+    }
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
