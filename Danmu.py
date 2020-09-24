@@ -118,7 +118,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--sn', '-s', type=int, help='動畫 SN 碼(數字)')
     parser.add_argument('--all', '-a', action='store_true', help='下載所有彈幕')
-    parser.add_argument('--format', '-f', type=str, default='{anime_name}[{episode}].ass', help='字幕檔名 format')
+    parser.add_argument('--format', '-f', type=str, default='{anime_name}[{episode}].ass', help='字幕檔名 format 預設為 \'{anime_name}[{episode}].ass\'')
     # parser.add_argument('--episode', '-e', type=str, help='根據集數下載，以逗號分開')
     parser.add_argument('--path', '-p', type=str, help='下載的資料夾位置，預設為 ./bangumi/<ANIME_NAME>/*.ass', default='bangumi')
 
