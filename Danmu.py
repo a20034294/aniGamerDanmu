@@ -81,6 +81,7 @@ def downlaod_all(sn, bangumi_path, format_str='{anime_name}[{episode}].ass'):
     anime_name = re.match(r'(^.+)\s\[.+\]$', soup.find_all('div', class_='anime_name')[0].h1.string).group(1)
     print(anime_name)
 
+    # This may fail 抓不到其他集數 可能為劇場版 套用單集下載策略
     sn_list = soup.find_all('section', class_='season')[0].find_all('a')
 
     os.makedirs(os.path.join(bangumi_path, anime_name), exist_ok=True)
@@ -127,8 +128,11 @@ if __name__ == '__main__':
         print('請輸入 SN')
         exit(0)
     if arg.all == True:
-        downlaod_all(arg.sn, arg.path, arg.format)
-        exit(0)
+        try:
+            downlaod_all(arg.sn, arg.path, arg.format)
+            exit(0)
+        except:
+            print('抓不到其他集數 可能為劇場版 套用單集下載策略')
 
     anime_name, episode = get_info(arg.sn)
     os.makedirs(os.path.join(arg.path, anime_name), exist_ok=True)
