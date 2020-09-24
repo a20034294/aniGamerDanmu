@@ -19,9 +19,10 @@ def download(sn, full_filename)
 # sn: 動畫的 sn
 # full_filename: 輸出的 path + filename
 
-def downlaod_all(sn, bangumi_path)
+def downlaod_all(sn, bangumi_path, format_str)
 # sn: 動畫的 sn
 # bangumi_path: 彈幕會下載在 bangumi_path/<ANIME_NAME>/*.ass
+# format_str: 自訂字幕的檔名 預設為'{anime_name}[{episode}].ass'
 ```
 
 # Warning

@@ -78,7 +78,7 @@ def download(sn, full_filename):
 
     print('彈幕下載完成 file: ' + full_filename)
 
-def downlaod_all(sn, bangumi_path):
+def downlaod_all(sn, bangumi_path, format_str='{anime_name}[{episode}].ass'):
     h = {
         'Content-Type':
         'application/x-www-form-urlencoded;charset=utf-8',
@@ -104,7 +104,8 @@ def downlaod_all(sn, bangumi_path):
     os.makedirs(os.path.join(bangumi_path, anime_name), exist_ok=True)
 
     for s in sn_list:
-        download(s['href'][4:], os.path.join(bangumi_path, anime_name, anime_name + '[' + s.string + '].ass'))
+        episode = s.string
+        download(s['href'][4:], os.path.join(bangumi_path, anime_name, format_str.format(anime_name=anime_name, episode=episode)))
 
 def get_info(sn):
     h = {
@@ -132,6 +133,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--sn', '-s', type=int, help='動畫 SN 碼(數字)')
     parser.add_argument('--all', '-a', action='store_true', help='下載所有彈幕')
+    parser.add_argument('--format', '-f', type=str, default='{anime_name}[{episode}].ass', help='字幕檔名 format')
     # parser.add_argument('--episode', '-e', type=str, help='根據集數下載，以逗號分開')
     parser.add_argument('--path', '-p', type=str, help='下載的資料夾位置，預設為 ./bangumi/<ANIME_NAME>/*.ass', default='bangumi')
 
@@ -140,10 +142,10 @@ if __name__ == '__main__':
         print('請輸入 SN')
         exit(0)
     if arg.all == True:
-        downlaod_all(arg.sn, arg.path)
+        downlaod_all(arg.sn, arg.path, arg.format)
         exit(0)
 
     anime_name, episode = get_info(arg.sn)
     os.makedirs(os.path.join(arg.path, anime_name), exist_ok=True)
-    download(arg.sn, os.path.join(arg.path, anime_name, anime_name + '[' + episode + '].ass'))
+    download(arg.sn, os.path.join(arg.path, anime_name, arg.format.format(anime_name=anime_name, episode=episode)))
 
