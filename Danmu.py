@@ -130,11 +130,13 @@ if __name__ == '__main__':
     if arg.all == True:
         try:
             downlaod_all(arg.sn, arg.path, arg.format)
-            exit(0)
         except:
             print('抓不到其他集數 可能為劇場版 套用單集下載策略')
-
-    anime_name, episode = get_info(arg.sn)
-    os.makedirs(os.path.join(arg.path, anime_name), exist_ok=True)
-    download(arg.sn, os.path.join(arg.path, anime_name, arg.format.format(anime_name=anime_name, episode=episode)))
+            anime_name, episode = get_info(arg.sn)
+            os.makedirs(os.path.join(arg.path, anime_name), exist_ok=True)
+            download(arg.sn, os.path.join(arg.path, anime_name, arg.format.format(anime_name=anime_name, episode=episode)))
+    else:
+        anime_name, episode = get_info(arg.sn)
+        os.makedirs(os.path.join(arg.path, anime_name), exist_ok=True)
+        download(arg.sn, os.path.join(arg.path, anime_name, arg.format.format(anime_name=anime_name, episode=episode)))
 
